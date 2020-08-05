@@ -6,3 +6,5 @@ export class UsersController {
     const user = new User()
   }
 }
+
+// Teste
