@@ -1,0 +1,18 @@
+[
+   {
+      "type": "mysql",
+      "host": "186.232.109.90",
+      "port": 3307,
+      "username": "root",
+      "password": "ca3JAPJ6FXXK",
+      "database": "APIVeiculo",
+      "schema": "",
+      "synchronize": false,
+      "entities": ["./src/databases/db/entity/*.ts"],
+      "migrations": ["./src/databases/db/migrations/*.ts"],
+      "cli": {
+         "migrationsDir": "src/databases/db/migrations",
+         "entitiesDir": "src/databases/db/entity"
+      }
+   }
+]
