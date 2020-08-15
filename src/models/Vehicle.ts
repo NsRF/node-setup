@@ -26,8 +26,8 @@ export async function convertToVehicle(veiculo: veiculo): Promise<Vehicle> {
   vehicle.valorFipe = parseFloat(veiculo.ValorFipe);
 
   const connection = getConnection();
-  const tipo = await connection.manager.findOne(VehicleType, { where: { nome: veiculo.Tipo } });
 
+  const tipo = await connection.manager.findOne(VehicleType, { where: { nome: veiculo.Tipo } });
   if (!tipo) {
     throw new Error('Tipo de veiculo nao encontrado');
   }
@@ -40,4 +40,17 @@ export async function convertToVehicle(veiculo: veiculo): Promise<Vehicle> {
   vehicle.combustivel = combustivel;
 
   return vehicle;
+}
+
+export async function convertToVeiculo(vehicle: Vehicle): Promise<veiculo> {
+  const veiculo = <veiculo>{};
+  veiculo.Marca = vehicle.marca;
+  veiculo.Modelo = vehicle.modelo;
+  veiculo.Versao = vehicle.versao;
+  veiculo.AnoModelo = vehicle.anoModelo.getFullYear().toString();
+  veiculo.AnoFabricacao = vehicle.anoFabricacao.getFullYear().toString();
+  veiculo.Eixos = vehicle.eixos;
+  veiculo.ValorFipe = vehicle.valorFipe.toString();
+
+  return veiculo;
 }

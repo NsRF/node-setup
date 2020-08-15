@@ -2,9 +2,8 @@ import { Request, Response, Router } from 'express';
 import {
   Connection, createConnection, getConnection, Repository,
 } from 'typeorm/index';
-import {convertToVehicle, veiculo} from '@models/Vehicle';
+import { convertToVehicle, convertToVeiculo, veiculo } from '@models/Vehicle';
 import { Vehicle } from '../databases/db/entity/Vehicle';
-import { FuelType } from '../databases/db/entity/FuelType';
 
 export class VehicleController {
     rotas: Router = Router();
@@ -17,7 +16,8 @@ export class VehicleController {
       this.rotas.get('/listar', this.listar);
       this.rotas.get('/listar/:id', this.procurar);
       this.rotas.post('/criar', this.adicionar);
-      //this.rotas.post('/listar/modificar/:id', this.modificar);
+      this.rotas.put('/listar/:id', this.modificar);
+      this.rotas.delete('/listar/:id', this.deletar);
       createConnection().then((value: Connection) => {
         this.connection = value;
         this.vehicleRepository = this.connection.getRepository(Vehicle);
@@ -63,10 +63,15 @@ export class VehicleController {
         return res.json(salvar);
       }
 
-     /* modificar = async (req: Request, res: Response) => {
-        const modify: Vehicle = await this.vehicleRepository.findOne(req.params.id);
-        this.vehicleRepository.id = merge(modify, req.body);
-        const result = await this.vehicleRepository.save(modify);
-        return res.send(result);
-      }*/
+      modificar = async (req: Request, res: Response) => {
+        const veiculo = await this.vehicleRepository.findOne(req.params.id, req.body);
+        const vehicle = await convertToVeiculo(veiculo);
+        const salvar = await this.vehicleRepository.update(vehicle, req.body);
+        return res.json(salvar);
+      }
+
+      deletar = async (req: Request, res: Response) => {
+        const results = await this.vehicleRepository.delete(req.params.id);
+        return res.json(results);
+      }
 }
